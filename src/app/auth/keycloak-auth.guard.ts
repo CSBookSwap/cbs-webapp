@@ -1,6 +1,6 @@
 import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {inject, Injectable} from "@angular/core";
 import {KeycloakAuthGuard, KeycloakService} from "keycloak-angular";
+import {inject, Injectable} from "@angular/core";
 
 @Injectable({
   providedIn: 'root'
@@ -14,24 +14,30 @@ export class AuthGuard extends KeycloakAuthGuard {
 
   async isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree> {
 
-    console.log('state url: ' + state.url);
-
-    if (!this.authenticated) {
-      await this.keycloakService.login({
-        redirectUri: window.location.origin + state.url
-      });
+    if (!this.keycloakService.isLoggedIn()) {
+      await this.keycloakService.login();
     }
 
-    // Get the roles required from the route.
-    const requiredRoles = route.data['roles'];
+    const requiredRoles: string[] = route.data['roles'];
 
-    // Allow the user to proceed if no additional roles are required to access the route.
-    if (!Array.isArray(requiredRoles) || requiredRoles.length === 0) {
+    if (!requiredRoles || !requiredRoles.length) {
       return true;
+    } else {
+
+      const userRoles: string[] = this.keycloakService.getUserRoles();
+
+      if (requiredRoles.some(role => userRoles.includes(role))) {
+        return true;
+      }
     }
 
-    // Allow the user to proceed if all the required roles are present.
-    return requiredRoles.every((role) => this.roles.includes(role));
+    // const userRoles: string[] = this.keycloakService.getUserRoles();
+    //
+    // if (requiredRoles.some(role => userRoles.includes(role))) {
+    //   return true;
+    // }
+
+    return this.router.navigate(['']);
   }
 }
 

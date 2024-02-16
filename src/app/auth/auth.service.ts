@@ -1,54 +1,43 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {KeycloakService} from "keycloak-angular";
-import {from, Observable} from "rxjs";
-
-export interface AuthConfig {
-  redirectUrlLogin: string;
-  redirectUrlLogout: string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  keycloak = inject(KeycloakService);
-
-  constructor() {
-    if (this.keycloak.isLoggedIn()) {
-      this.keycloak.getKeycloakInstance().loadUserProfile();
-    }
+  constructor(private keycloakService: KeycloakService) {
   }
 
-  public logout(): void {
-    this.keycloak.logout("http://localhost:4200/").then();
+  async login() {
+    await this.keycloakService.login();
   }
 
-  login() {
-    this.keycloak.login({}).then();
+  async logout() {
+    await this.keycloakService.logout();
   }
 
-  isLoggedIn(): boolean {
-    return this.keycloak.isLoggedIn();
+  async isLoggedIn(): Promise<boolean> {
+    return this.keycloakService.isLoggedIn();
   }
 
-  getUsername(): string {
-    return this.keycloak.getKeycloakInstance()?.profile?.username as string;
+  async getUserRoles() {
+    return this.keycloakService.getUserRoles();
   }
 
-  getId(): string {
-    return this.keycloak?.getKeycloakInstance()?.profile?.id as string;
+  async getUsername() {
+    return this.keycloakService.getUsername();
   }
 
-  getTokenExpirationDate(): number {
-    return (this.keycloak.getKeycloakInstance().refreshTokenParsed as { exp: number })['exp'] as number;
+  async getUserProfile() {
+    return this.keycloakService.loadUserProfile();
   }
 
-  refresh(): Observable<any> {
-    return from(this.keycloak.getKeycloakInstance().updateToken(1800));
+  async getToken() {
+    return this.keycloakService.getToken();
   }
 
-  isExpired(): boolean {
-    return this.keycloak.getKeycloakInstance().isTokenExpired();
+  async register() {
+    await this.keycloakService.register();
   }
 }
