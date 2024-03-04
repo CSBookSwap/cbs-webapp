@@ -8,7 +8,7 @@ import {keycloakAuthGuard} from "./auth/keycloak-auth.guard";
 export const routes: Routes = [
   {path: '', component: IndexComponent, pathMatch: 'full'},
   {path: 'books', component: BooksComponent, pathMatch: 'full'},
-  {path: 'authors', canActivate: [keycloakAuthGuard], component: AuthorsComponent, pathMatch: 'full'},
-  {path: 'user', canActivate: [keycloakAuthGuard], component: UserComponent, pathMatch: 'full'},
+  {path: 'authors', component: AuthorsComponent, pathMatch: 'full'},
+  {path: 'user', component: UserComponent, pathMatch: 'full'},
   {path: '**', redirectTo: ''}
 ];

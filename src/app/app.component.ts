@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
-import {HeaderComponent} from "./layout/header/header.component";
+import {NavComponent} from "./layout/nav/nav.component";
 import {FooterComponent} from "./layout/footer/footer.component";
+import {AuthService} from "./auth/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import {FooterComponent} from "./layout/footer/footer.component";
   imports: [
     CommonModule,
     RouterOutlet,
-    HeaderComponent,
+    NavComponent,
     FooterComponent
   ],
   templateUrl: './app.component.html',
