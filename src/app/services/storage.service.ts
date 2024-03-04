@@ -1,78 +1,65 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
+import {User} from "../models/user";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TokenStorageService {
+export class StorageService {
 
-  private accessToken: string = 'access_token';
-  private expiresInKey: string = 'expires_in';
-  private refreshExpiresInKey: string = 'refresh_expires_in';
-  private refreshToken: string = 'refresh_token';
-  private sessionState: string = 'session_state';
-  private scope: string = 'scope';
+  private userToken = 'user';
+  private rolesToken = 'roles';
 
-  saveAccessToken(access_token: string) {
-    window.localStorage.removeItem(this.accessToken);
-    window.localStorage.setItem(this.accessToken, access_token);
+  saveUser(user: User) {
+    window.localStorage.removeItem(this.userToken);
+    window.localStorage.setItem(this.userToken, JSON.stringify(user));
   }
 
-  getAccessToken(): string | null {
-    return window.localStorage.getItem(this.accessToken);
+  getUsername(): string {
+    const userData = window.localStorage.getItem(this.userToken);
+    if (userData !== null) {
+      const user: User = JSON.parse(userData);
+      return user.username?.toString() || '';
+    } else {
+      return '';
+    }
   }
 
-  saveExpiresIn(expires_in: number) {
-    window.localStorage.removeItem(this.expiresInKey);
-    window.localStorage.setItem(this.expiresInKey, expires_in.toString());
+  getUser(): User {
+    const userData = window.localStorage.getItem(this.userToken);
+    if (userData !== null) {
+      return JSON.parse(userData);
+    } else {
+      return {} as User;
+    }
   }
 
-  getExpiresIn(): string | null {
-    return window.localStorage.getItem(this.expiresInKey);
+  getId(): string {
+    const userData = window.localStorage.getItem(this.userToken);
+    if (userData !== null) {
+      const user: User = JSON.parse(userData);
+      return user.id?.toString() || '';
+    } else {
+      return '';
+    }
   }
 
-  saveRefreshExpiresIn(refresh_expires_in: number) {
-    window.localStorage.removeItem(this.refreshExpiresInKey);
-    window.localStorage.setItem(this.refreshExpiresInKey, refresh_expires_in.toString());
-  }
-
-  getRefreshExpiresIn(): string | null {
-    return window.localStorage.getItem(this.refreshExpiresInKey);
-  }
-
-  saveRefreshToken(refresh_token: string) {
-    window.localStorage.removeItem(this.refreshToken);
-    window.localStorage.setItem(this.refreshToken, refresh_token);
-  }
-
-  getRefreshToken(): string | null {
-    return window.localStorage.getItem(this.refreshToken);
-  }
-
-  saveSessionState(session_state: string) {
-    window.localStorage.removeItem(this.sessionState);
-    window.localStorage.setItem(this.sessionState, session_state);
-  }
-
-  getSessionState(): string | null {
-    return window.localStorage.getItem(this.sessionState);
-  }
-
-  saveScope(scope: string) {
-    window.localStorage.removeItem(this.scope);
-    window.localStorage.setItem(this.scope, scope);
-  }
-
-  getScope(): string | null {
-    return window.localStorage.getItem(this.scope);
-  }
 
   clear() {
-    window.localStorage.removeItem(this.accessToken);
-    window.localStorage.removeItem(this.expiresInKey);
-    window.localStorage.removeItem(this.refreshExpiresInKey);
-    window.localStorage.removeItem(this.refreshToken);
-    window.localStorage.removeItem(this.sessionState);
-    window.localStorage.removeItem(this.scope);
+    window.localStorage.clear();
+  }
+
+  saveRoles(userRoles: string[]) {
+    window.localStorage.removeItem(this.rolesToken);
+    window.localStorage.setItem(this.rolesToken, JSON.stringify(userRoles));
+  }
+
+  getRoles(): string[] {
+    const rolesData = window.localStorage.getItem(this.rolesToken);
+    if (rolesData !== null) {
+      return JSON.parse(rolesData);
+    } else {
+      return [];
+    }
   }
 }

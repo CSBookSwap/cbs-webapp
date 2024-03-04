@@ -13,9 +13,6 @@ export class BookService {
   private baseUrl: string = `${environment.apiUrl}/books`;
   private http: HttpClient = inject(HttpClient);
 
-  constructor() {
-  }
-
   public getBooks(page: Page): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.baseUrl}/${page.number}/${page.size}`);
   }
@@ -37,7 +34,7 @@ export class BookService {
   }
 
   public updateBook(book: Book): boolean {
-    var response: boolean = false;
+    let response: boolean = false;
     this.http.put(`${this.baseUrl}`, book)
       .subscribe(data => {
         data ? response = true : response = false;
@@ -46,7 +43,7 @@ export class BookService {
   }
 
   public deleteBook(id: number): boolean {
-    var response: boolean = false;
+    let response: boolean = false;
     this.http.delete(`${this.baseUrl}/${id}`)
       .subscribe(data => {
         data ? response = true : response = false;
