@@ -1,4 +1,8 @@
 import {Component} from '@angular/core';
+import {AuthService} from "../../auth/auth.service";
+import {StorageService} from "../../services/storage.service";
+import {UserService} from "../../services/user.service";
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-user',
@@ -9,6 +13,17 @@ import {Component} from '@angular/core';
 })
 export class UserComponent {
 
-  constructor() {
+  user: User;
+  roles: string[] = [];
+
+  constructor(private storageService: StorageService,
+              private userService: UserService) {
+
+    this.user = this.storageService.getUser();
+    this.roles = this.storageService.getRoles();
   }
+
+
+
+
 }

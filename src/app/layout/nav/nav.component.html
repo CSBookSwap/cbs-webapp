@@ -2,6 +2,12 @@
   <a class="cbs-logo" routerLink=""><span>CS Book Swap</span></a>
   <a class="nav-button" routerLink="books">Books</a>
   <a class="nav-button" routerLink="authors">Authors</a>
-  <a class="nav-button" routerLink="user">User</a>
-  <!--  <a class="account-button" (click)="auth()">Login</a>-->
+  <div class="nav-dropdown" *ngIf="isLogin">
+    <a class="account-button">{{username}}</a>
+    <div class="dropdown-content">
+      <a routerLink="user">Profile</a>
+      <a (click)="logout()">Logout</a>
+    </div>
+  </div>
+  <a class="account-button" *ngIf="!isLogin" (click)="auth()">Login</a>
 </nav>
